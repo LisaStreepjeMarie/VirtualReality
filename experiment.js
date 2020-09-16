@@ -62,12 +62,18 @@ function init() {
     });
 
     let cube = new THREE.Mesh(
-        new THREE.BoxBufferGeometry(1,1,1),
-        new THREE.MeshLambertMaterial({color:'red'})
+        new THREE.CircleBufferGeometry(1,1,1),
+        new THREE.MeshLambertMaterial({color:'green'})
     );
     cube.position.set(-4, 1.5, -15);
+    var geometry = new THREE.CircleBufferGeometry( 5, 32 );
+    var material = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
+    var circle = new THREE.Mesh( geometry, material );
+    circle.position.set(-2, 1.7, -13);
     scene.add(cube);
+    scene.add(circle);
     arObjects.push(cube);
+    arObjects.push(circle);
 
     console.log("setup renderer");
     // setup ARView with ARPerspectiveCamera
@@ -127,15 +133,15 @@ function updateHeight(arObject, time) {
 
 function addCube() {
 
-    var cursor = new THREE.Vector3();
-    cursor.set( 0, 0, - 0.2 ).applyMatrix4( arControls.matrixWorld );
-
-    let cube = new THREE.Mesh(
-        new THREE.BoxBufferGeometry(1,1,1),
-        new THREE.MeshLambertMaterial({color:'blue'})
-    );
-    let randomX = (Math.random() * 30) - 15;
-    cube.position.set(randomX, 1.5, -15);
-    scene.add(cube);
-    arObjects.push(cube);
+    // var cursor = new THREE.Vector3();
+    // cursor.set( 0, 0, - 0.2 ).applyMatrix4( arControls.matrixWorld );
+    //
+    // let cube = new THREE.Mesh(
+    //     new THREE.BoxBufferGeometry(1,1,1),
+    //     new THREE.MeshLambertMaterial({color:'blue'})
+    // );
+    // let randomX = (Math.random() * 30) - 15;
+    // cube.position.set(randomX, 1.5, -15);
+    // scene.add(cube);
+    // arObjects.push(cube);
 }
