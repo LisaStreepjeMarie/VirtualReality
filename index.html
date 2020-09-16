@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style type="text/css">
+        body {
+            margin: 0;
+            background-color: #000;
+        }
+        canvas {
+            display: block;
+        }
+    </style>
+
+    <script src="https://threejs.org/build/three.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three.ar.js@latest/dist/three.ar.min.js"></script>
+</head>
+<body>
+    <script type="module">
+        // Import three
+        //import * as THREE from 'three.module.js';
+        // Import the default VRButton
+        // import { VRButton } from 'https://unpkg.com/three/examples/jsm/webxr/VRButton.js';
+        import { ARButton } from 'https://unpkg.com/three/examples/jsm/webxr/ARButton.js';
+
+        import { TTFLoader } from 'https://unpkg.com/three/examples/jsm/loaders/TTFLoader.js';
+        import 'https://unpkg.com/three/examples/js/libs/opentype.min.js';
+
+        // Make a new scene
+        let scene = new THREE.Scene();
+        // Set background color of the scene to gray
+        // scene.background = new THREE.Color(0x505050);
+
+        // Make a camera. note that far is set to 100, which is better for realworld sized environments
+        let camera = new THREE.ARPerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 100);
+        camera.position.set(0, 1.6, 3);
+        scene.add(camera);
+
+        // Add some lights
+        var light = new THREE.HemisphereLight( 0xffffff, 0xbbbbff, 1 );
+        light.position.set( 0, 1, 0 );
+        scene.add( light );
+        // var light = new THREE.DirectionalLight(0xffffff,0.5);
+        // light.position.set(1, 1, 1).normalize();
+        // scene.add(light);
+        scene.add(new THREE.AmbientLight(0xffffff,0.5))
+
+        // Make a red cube
+        let cube = new THREE.Mesh(
+            new THREE.BoxBufferGeometry(1,1,1),
+            new THREE.MeshLambertMaterial({color:'red'})
+        );
+        cube.position.set(0, 1.5, -10);
+        // scene.add(cube);
+
+
+        const text_loader = new TTFLoader()
+
+        let characterArray = [];
+
+        text_loader.load("./font/Otsutome_font_ver3/OtsutomeFont_Ver3.ttf", data => {
+            const font = new THREE.FontLoader().parse(data)
+            const geo = new THREE.TextBufferGeometry("MIW", { //"祝う"
+                font: font,
+                size: 1,
+                height: .25,
+                bevelEnabled: true,
+                bevelThickness: 0.2,
+                bevelSize: 0.05,
+            });
+
+            let mesh = new THREE.Mesh(
+                geo,
+                new THREE.MeshLambertMaterial({color: 'green'})
+            );
+            mesh.position.set(0, 1.5, -7);
+
+            scene.add(mesh);
+            characterArray.push(mesh);
+        });
+
+        // Make a renderer that fills the screen
+        let renderer = new THREE.WebGLRenderer({antialias: true, alpha: true});
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.setSize(window.innerWidth, window.innerHeight);
+
+        // Turn on VR support
+        renderer.xr.enabled = true;
+        // Set animation loop
+        renderer.setAnimationLoop(render);
+        // Add canvas to the page
+        document.body.appendChild(renderer.domElement);
+
+        // Add a button to enter/exit vr to the page
+        // document.body.appendChild(VRButton.createButton(renderer));
+
+        // For AR instead, import ARButton at the top
+        //    import { ARButton } from 'https://unpkg.com/three/examples/jsm/webxr/ARButton.js';
+        // then create the button
+        document.body.appendChild(ARButton.createButton(renderer));
+
+        // Handle browser resize
+        window.addEventListener('resize', onWindowResize, false);
+
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        var controller = renderer.xr.getController( 0 );
+        controller.userData.skipFrames = 0;
+        scene.add( controller );
+
+        function render(time) {
+            // Rotate the cube
+
+            characterArray.forEach((item, index) => updateHeight(item, time));
+
+            // Draw everything
+            renderer.render(scene, camera);
+        }
+
+        function updateHeight(character, time) {
+            character.translateY(-.000001 * time);
+            if (character.getWorldPosition().y < -2) { // 0 is vloer
+                character.translateY(4); // 3 is plafond (in ~meters)
+            }
+        }
+    </script>
+</body>
+</html>
