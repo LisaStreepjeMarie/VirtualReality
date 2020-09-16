@@ -1,5 +1,5 @@
-import {ARButton} from 'https://unpkg.com/three/examples/jsm/webxr/ARButton.js';
-import {TTFLoader} from 'https://unpkg.com/three/examples/jsm/loaders/TTFLoader.js';
+import { ARButton } from 'https://unpkg.com/three/examples/jsm/webxr/ARButton.js';
+import { TTFLoader } from 'https://unpkg.com/three/examples/jsm/loaders/TTFLoader.js';
 
 let arDisplay, renderer, scene, arView, camera, arControls;
 let arObjects = [];
@@ -16,12 +16,12 @@ function init() {
     const light = new THREE.HemisphereLight(0xffffff, 0xbbbbff, 1);
     light.position.set( 0, 1, 0 );
     scene.add( light );
-    scene.add(new THREE.AmbientLight(0xffffff, 0.5));
+    scene.add(new THREE.AmbientLight(0xffffff, 0.5))
 
     console.log("add text");
     const text_loader = new TTFLoader();
     text_loader.load("../font/Otsutome_font_ver3/OtsutomeFont_Ver3.ttf", data => {
-        const font = new THREE.FontLoader().parse(data);
+        const font = new THREE.FontLoader().parse(data)
 
         let geo = new THREE.TextBufferGeometry("MIW", { //"祝う"
             font: font,
@@ -38,7 +38,7 @@ function init() {
         );
         mesh.position.set(0, 1.5, -15);
 
-        console.log("adding font mesh");
+        console.log("adding font mesh")
         scene.add(mesh);
         arObjects.push(mesh);
 
@@ -87,9 +87,9 @@ function init() {
     arControls.userData.skipFrames = 0;
     scene.add( arControls );
 
-    console.log("animate!");
+    console.log("animate!")
     animate();
-    console.log("animating?");
+    console.log("animating?")
 }
 
 function animate() {
