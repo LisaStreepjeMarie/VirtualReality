@@ -38,7 +38,7 @@ function init() {
         );
         mesh.position.set(0, 1.5, -15);
 
-        console.log("adding font mesh")
+        console.log("adding font mesh");
         scene.add(mesh);
         arObjects.push(mesh);
 
@@ -62,17 +62,18 @@ function init() {
     });
 
     let cube = new THREE.Mesh(
-        new THREE.CircleBufferGeometry(1,1,1),
+        new THREE.PlaneGeometry(2,2,2,2),
         new THREE.MeshLambertMaterial({color:'green'})
     );
     cube.position.set(-4, 1.5, -15);
-    var geometry = new THREE.CircleBufferGeometry( 5, 32 );
+
+    var geometry = new THREE.CircleBufferGeometry( 5, 100 );
     var material = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
     var circle = new THREE.Mesh( geometry, material );
-    circle.position.set(-2, 1.7, -13);
-    scene.add(cube);
+    circle.position.set(3, 1.7, -13);
+    // scene.add(cube);
     scene.add(circle);
-    arObjects.push(cube);
+    // arObjects.push(cube);
     arObjects.push(circle);
 
     console.log("setup renderer");
@@ -93,7 +94,7 @@ function init() {
     arControls.userData.skipFrames = 0;
     scene.add( arControls );
 
-    console.log("animate!")
+    console.log("animate!");
     animate();
     console.log("animating?")
 }
@@ -122,13 +123,14 @@ init();
 
 
 function updateHeight(arObject, time) {
-    arObject.translateY(-.001 * time);
-    arObject.rotateY(0.001 * time);
+    arObject.translateX(-.005 * time);
+    arObject.rotateX(0.0001 * time);
     let position = arObject.getWorldPosition(new THREE.Vector3());
 
-    if (position.y < -5) {
-        arObject.translateY(10);
+    if (position.x < -30) {
+        arObject.translateX(50);
     }
+
 }
 
 function addCube() {
